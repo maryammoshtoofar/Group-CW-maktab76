@@ -2,20 +2,30 @@ const API_URL = "https://62b40bbda36f3a973d2ab0ed.mockapi.io";
 const table = document.querySelector("#table tbody");
 const DEFAULT_PAGE_COUNT = 5;
 let current_page = 1;
+const spinner = document.querySelector("#loading");
+
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
   getData();
   creatPagination();
 });
 
+
+
+
+
 function getData() {
   table.innerHTML = " ";
+  spinner.style.display = "block";
   fetch(`${API_URL}/teamwork${generateQueryParams(current_page)}`)
-    .then((response) => response.json())
-    .then((data) => {
-      const { persons, count } = data;
-      persons.forEach(addToDom);
-      creatPagination(count);
+  .then((response) => response.json())
+  .then((data) => {
+    const { persons, count } = data;
+    persons.forEach(addToDom);
+    creatPagination(count);
+    spinner.style.display = "none";
     });
 }
 

@@ -7,3 +7,9 @@ td {
   width: 90% !important;
   margin: 50px auto;
 }
+.loading{
+  position: absolute;
+  top:70%;
+  left:50%;
+  display: none;
+}
