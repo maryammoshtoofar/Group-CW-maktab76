@@ -1,46 +1,79 @@
 const API_URL = "https://62b40bbda36f3a973d2ab0ed.mockapi.io";
 const table = document.querySelector("#table tbody");
+const DEFAULT_PAGE_COUNT = 5;
+let current_page = 1;
 
 document.addEventListener("DOMContentLoaded", () => {
   getData();
+  creatPagination();
 });
 
 function getData() {
-  fetch(`${API_URL}/teamwork`)
+  table.innerHTML = " ";
+  fetch(`${API_URL}/teamwork${generateQueryParams(current_page)}`)
     .then((response) => response.json())
     .then((data) => {
       const { persons, count } = data;
       persons.forEach(addToDom);
+      creatPagination(count);
     });
 }
+
+document.querySelector("ul.pagination").addEventListener("click", (event) => {
+  console.log("hi");
+  const lis = document.querySelectorAll(".page-link");
+  if (event.target.innerHTML === "previous") current_page--;
+  else if (event.target.innerHTML === "next") current_page++;
+  else current_page = Number(event.target.innerHTML);
+  lis.forEach((li) => li.classList.remove("active"));
+  event.target.classList.add("active");
+  getData();
+});
 
 function addToDom(person) {
   const row = document.createElement("tr");
   row.dataset.id = person.id;
-  const{idCell , nameCell , familyCell , birthdayCell ,nationIdCell,
-    fathersNameCell , jobCell ,educationCell , genderCell ,countryCell ,
-    stateCell , cityCell , streetCell ,blockCell ,noCell , floorCell,
-  unitCell ,editCell , deletCell } = creatCell(person)
+  const {
+    idCell,
+    nameCell,
+    familyCell,
+    birthdayCell,
+    nationIdCell,
+    fathersNameCell,
+    jobCell,
+    educationCell,
+    genderCell,
+    countryCell,
+    stateCell,
+    cityCell,
+    streetCell,
+    blockCell,
+    noCell,
+    floorCell,
+    unitCell,
+    editCell,
+    deleteCell,
+  } = creatCell(person);
 
-  row.appendChild(idCell)
-  row.appendChild(nameCell)
-  row.appendChild(familyCell)
-  row.appendChild(birthdayCell)
-  row.appendChild(nationIdCell)
-  row.appendChild(fathersNameCell)
-  row.appendChild(jobCell)
-  row.appendChild(educationCell)
-  row.appendChild(genderCell)
-  row.appendChild(countryCell)
-  row.appendChild(stateCell)
-  row.appendChild(cityCell)
-  row.appendChild(streetCell)
-  row.appendChild(blockCell)
-  row.appendChild(noCell)
-  row.appendChild(floorCell)
-  row.appendChild(unitCell)
-  row.appendChild(editCell)
-  row.appendChild(deletCell)
+  row.appendChild(idCell);
+  row.appendChild(nameCell);
+  row.appendChild(familyCell);
+  row.appendChild(birthdayCell);
+  row.appendChild(nationIdCell);
+  row.appendChild(fathersNameCell);
+  row.appendChild(jobCell);
+  row.appendChild(educationCell);
+  row.appendChild(genderCell);
+  row.appendChild(countryCell);
+  row.appendChild(stateCell);
+  row.appendChild(cityCell);
+  row.appendChild(streetCell);
+  row.appendChild(blockCell);
+  row.appendChild(noCell);
+  row.appendChild(floorCell);
+  row.appendChild(unitCell);
+  row.appendChild(editCell);
+  row.appendChild(deleteCell);
 
   table.appendChild(row);
 }
@@ -98,20 +131,53 @@ function creatCell(data) {
   unitCell.innerHTML = data.location.unit;
 
   const editCell = document.createElement("td");
-  const editbtn = document.createElement('button')
-  editbtn.dataset.id = data.id
-  editbtn.innerHTML = '<i class="bi bi-pencil-square"></i>'
-  editCell.appendChild(editbtn)
-  
-  
-  const deletCell = document.createElement("td");
-  const deletbtn = document.createElement('button')
-  deletCell.dataset.id = data.id ;
-  deletbtn.innerHTML = '<i class="bi bi-trash3"></i>'
-  deletCell.appendChild(deletbtn)
+  const editBtn = document.createElement("button");
+  editBtn.dataset.id = data.id;
+  editBtn.innerHTML = '<i class="bi bi-pencil-square"></i>';
+  editCell.appendChild(editBtn);
 
-  return{idCell , nameCell , familyCell , birthdayCell ,nationIdCell,
-          fathersNameCell , jobCell ,educationCell , genderCell ,countryCell ,
-          stateCell , cityCell , streetCell ,blockCell ,noCell , floorCell,
-        unitCell ,editCell , deletCell }  
+  const deleteCell = document.createElement("td");
+  const deleteBtn = document.createElement("button");
+  deleteBtn.dataset.id = data.id;
+  deleteBtn.innerHTML = '<i class="bi bi-trash3"></i>';
+  deleteCell.appendChild(deleteBtn);
+
+  return {
+    idCell,
+    nameCell,
+    familyCell,
+    birthdayCell,
+    nationIdCell,
+    fathersNameCell,
+    jobCell,
+    educationCell,
+    genderCell,
+    countryCell,
+    stateCell,
+    cityCell,
+    streetCell,
+    blockCell,
+    noCell,
+    floorCell,
+    unitCell,
+    editCell,
+    deleteCell,
+  };
+}
+
+function creatPagination(count) {
+  const pageCount = Math.ceil(count / DEFAULT_PAGE_COUNT);
+  let lis = " ";
+  lis += `<li class="page-item " > <a class="page-link">previous</a> </li>`;
+  for (let i = 1; i < pageCount; i++) {
+    lis += `<li class="page-item ${
+      i === current_page ? "active" : ""
+    } "> <a class="page-link">${i}</a> </li>`;
+  }
+  lis += `<li class="page-item"> <a class="page-link">next</a> </li>`;
+  document.querySelector("ul.pagination").innerHTML = lis;
+}
+
+function generateQueryParams(page = 1) {
+  return `?page=${page}&limit=${DEFAULT_PAGE_COUNT}`;
 }
