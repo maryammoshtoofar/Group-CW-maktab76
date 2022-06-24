@@ -234,7 +234,21 @@ confirmDelete.addEventListener('click',()=>{
       background: "linear-gradient(to right, #00b09b, #96c93d)",
     }
    }).showToast();
+  }).catch(()=>{
+    Toastify({
+      text: "Not deleted",
+      duration: 2000,
+      close: true,
+      gravity: "bottom", // `top` or `bottom`
+      position: "left", // `left`, `center` or `right`
+      style: {
+        background:"red" ,
+      }
+     }).showToast();
+
   })
+  
+
  
  
 });
