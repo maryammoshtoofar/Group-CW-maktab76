@@ -9,7 +9,7 @@ const spinner = document.querySelector("#loading");
 
 document.addEventListener("DOMContentLoaded", () => {
   getData();
-  creatPagination();
+  createPagination();
 });
 
 
@@ -88,7 +88,7 @@ function addToDom(person) {
   table.appendChild(row);
 }
 
-function creatCell(data) {
+function createCell(data) {
   const idCell = document.createElement("td");
   idCell.innerHTML = data.id;
 
@@ -151,6 +151,9 @@ function creatCell(data) {
   deleteBtn.dataset.id = data.id;
   deleteBtn.innerHTML = '<i class="bi bi-trash3"></i>';
   deleteCell.appendChild(deleteBtn);
+  deleteBtn.dataset.bsToggle='modal';
+  deleteBtn.dataset.bsTarget='#delete-modal'
+  // deleteBtn.addEventListener('click',)
 
   return {
     idCell,
@@ -175,7 +178,7 @@ function creatCell(data) {
   };
 }
 
-function creatPagination(count) {
+function createPagination(count) {
   const pageCount = Math.ceil(count / DEFAULT_PAGE_COUNT);
   let lis = " ";
   lis += `<li class="page-item " > <a class="page-link">previous</a> </li>`;
