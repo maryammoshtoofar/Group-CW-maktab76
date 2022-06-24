@@ -19,15 +19,14 @@ const state = document.getElementById("state");
 const street = document.getElementById("street");
 const no = document.getElementById("no");
 const unit = document.getElementById("unit");
+const formButton = document.getElementById("formButton");
 
 document.addEventListener("DOMContentLoaded", () => {
   getUserData(params.id);
 });
 
 if (params.id) {
-  const editBtn = document.createElement("button");
-  editBtn.innerHTML = "Edit this Infromation";
-  form.appendChild(editBtn);
+  formButton.innerHTML = "Edit Information";
   function getUserData(id) {
     fetch(`${API_URL}/teamwork/${id}`)
       .then((response) => response.json())
@@ -52,4 +51,25 @@ if (params.id) {
         console.log(data);
       });
   }
+  function userInfoEdit(data,id) {
+    return fetch(`${API_URL}/teamwork/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log("hi"));
+  }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const location = new Object();
+    location.unit = "test";
+    const formData = new FormData(form);
+    const updatedData = Object.fromEntries(formData);
+    updatedData.location = location;
+    console.log(updatedData);
+    userInfoEdit(updatedData , params.id);
+  });
 }
