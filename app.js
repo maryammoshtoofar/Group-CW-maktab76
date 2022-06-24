@@ -24,7 +24,7 @@ function getData() {
   .then((data) => {
     const { persons, count } = data;
     persons.forEach(addToDom);
-    creatPagination(count);
+    createPagination(count);
     spinner.style.display = "none";
     });
 }
@@ -63,7 +63,7 @@ function addToDom(person) {
     unitCell,
     editCell,
     deleteCell,
-  } = creatCell(person);
+  } = createCell(person);
 
   row.appendChild(idCell);
   row.appendChild(nameCell);
