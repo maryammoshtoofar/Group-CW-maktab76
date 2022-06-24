@@ -83,13 +83,40 @@ if (params.id) {
       },
     })
       .then((res) => res.json())
-      .then(() => (window.location.href = `http://127.0.0.1:5501/index.html`));
+      .then(() =>{ 
+      Toastify({
+        text: "User added",
+        duration: 2000,
+        close: true,
+        gravity: "bottom", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+      }).showToast()
+      setTimeout(()=>(window.location.href = `http://127.0.0.1:5501/index.html`),3000)
+      ;
+    })
+    .catch(() => {
+      Toastify({
+        text: "Not added",
+        duration: 2000,
+        close: true,
+        gravity: "bottom", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        style: {
+          background: "red",
+        },
+      }).showToast();
+      ;
+    })
   }
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const formData = new FormData(form);
     const addData = Object.fromEntries(formData);
     addUserInfo(addData);
+
   });
   
 }
