@@ -11,6 +11,7 @@ const birthday = document.getElementById("bDate");
 
 const confirmDelete = document.getElementById("confirmDelete");
 
+const addBtn= document.getElementById('addBtn');
 //GET
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -245,3 +246,7 @@ confirmDelete.addEventListener("click", () => {
 function editPage(id) {
   window.location.href = `http://127.0.0.1:5501/formPage.html?id=${id}&page=${current_page}`;
 }
+
+addBtn.addEventListener('click',()=>{
+  window.location.href = "http://127.0.0.1:5501/formPage.html";
+})

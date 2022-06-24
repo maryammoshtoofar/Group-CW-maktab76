@@ -72,4 +72,25 @@ if (params.id) {
     console.log(updatedData);
     userInfoEdit(updatedData , params.id);
   });
+} else{
+  formButton.innerHTML = "Add this Information";
+  function addUserInfo(data, ){
+    return fetch(`${API_URL}/teamwork`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(() => (window.location.href = `http://127.0.0.1:5501/index.html`));
+  }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const addData = Object.fromEntries(formData);
+    addUserInfo(addData);
+  });
+  
 }
+
