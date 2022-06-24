@@ -4,15 +4,12 @@ const DEFAULT_PAGE_COUNT = 5;
 let current_page = 1;
 const spinner = document.querySelector("#loading");
 
-const userId =document.getElementById('userId');
-const userName =document.getElementById('userName');
-const familyName =document.getElementById('familyName');
-const birthday =document.getElementById('bDate');
+const userId = document.getElementById("userId");
+const userName = document.getElementById("userName");
+const familyName = document.getElementById("familyName");
+const birthday = document.getElementById("bDate");
 
-const confirmDelete = document.getElementById('confirmDelete');
-
-
-
+const confirmDelete = document.getElementById("confirmDelete");
 
 //GET
 
@@ -21,17 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
   createPagination();
 });
 
-
 function getData() {
   table.innerHTML = " ";
   spinner.style.display = "block";
   fetch(`${API_URL}/teamwork${generateQueryParams(current_page)}`)
-  .then((response) => response.json())
-  .then((data) => {
-    const { persons, count } = data;
-    persons.forEach(addToDom);
-    createPagination(count);
-    spinner.style.display = "none";
+    .then((response) => response.json())
+    .then((data) => {
+      const { persons, count } = data;
+      persons.forEach(addToDom);
+      createPagination(count);
+      spinner.style.display = "none";
     });
 }
 
@@ -151,16 +147,16 @@ function createCell(data) {
   editBtn.dataset.id = data.id;
   editBtn.innerHTML = '<i class="bi bi-pencil-square"></i>';
   editCell.appendChild(editBtn);
+  editBtn.setAttribute("onclick", `editPage(${data.id})`);
 
   const deleteCell = document.createElement("td");
   const deleteBtn = document.createElement("button");
   deleteBtn.dataset.id = data.id;
   deleteBtn.innerHTML = '<i class="bi bi-trash3"></i>';
   deleteCell.appendChild(deleteBtn);
-  deleteBtn.dataset.bsToggle='modal';
-  deleteBtn.dataset.bsTarget='#delete-modal'
-  deleteBtn.setAttribute('onclick' ,`getModalData(${data.id})`);
-  
+  deleteBtn.dataset.bsToggle = "modal";
+  deleteBtn.dataset.bsTarget = "#delete-modal";
+  deleteBtn.setAttribute("onclick", `getModalData(${data.id})`);
 
   return {
     idCell,
@@ -202,55 +198,50 @@ function generateQueryParams(page = 1) {
   return `?page=${page}&limit=${DEFAULT_PAGE_COUNT}`;
 }
 
-function getModalData(id){
-
+function getModalData(id) {
   fetch(`${API_URL}/teamwork/${id}`)
-  .then((response) => response.json())
-  .then((data) => {
-  
-    userId.innerText = data.id;
-    userId.dataset.value =data.id;
-   userName.innerText = data.name; 
-   familyName.innerText = data.family; 
-   birthday.innerText = data.birthday; 
-  })
+    .then((response) => response.json())
+    .then((data) => {
+      userId.innerText = data.id;
+      userId.dataset.value = data.id;
+      userName.innerText = data.name;
+      familyName.innerText = data.family;
+      birthday.innerText = data.birthday;
+    });
 }
 
-confirmDelete.addEventListener('click',()=>{
- let id = userId.dataset.value;
- fetch(`${API_URL}/teamwork/${id}`,{
-  method:'DELETE',
- })
- .then((response) => response.json())
- .then((data) =>{
-   getData()
-   Toastify({
-    text: "User deleted",
-    duration: 2000,
-    close: true,
-    gravity: "bottom", // `top` or `bottom`
-    position: "left", // `left`, `center` or `right`
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
-    }
-   }).showToast();
-  }).catch(()=>{
-    Toastify({
-      text: "Not deleted",
-      duration: 2000,
-      close: true,
-      gravity: "bottom", // `top` or `bottom`
-      position: "left", // `left`, `center` or `right`
-      style: {
-        background:"red" ,
-      }
-     }).showToast();
-
+confirmDelete.addEventListener("click", () => {
+  let id = userId.dataset.value;
+  fetch(`${API_URL}/teamwork/${id}`, {
+    method: "DELETE",
   })
-  
-
- 
- 
+    .then((response) => response.json())
+    .then((data) => {
+      getData();
+      Toastify({
+        text: "User deleted",
+        duration: 2000,
+        close: true,
+        gravity: "bottom", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+      }).showToast();
+    })
+    .catch(() => {
+      Toastify({
+        text: "Not deleted",
+        duration: 2000,
+        close: true,
+        gravity: "bottom", // `top` or `bottom`
+        position: "left", // `left`, `center` or `right`
+        style: {
+          background: "red",
+        },
+      }).showToast();
+    });
 });
-
-
+function editPage(id) {
+  window.location.href = `http://127.0.0.1:5501/formPage.html?id=${id}&page=${current_page}`;
+}
