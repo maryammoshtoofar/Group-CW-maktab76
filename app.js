@@ -4,16 +4,22 @@ const DEFAULT_PAGE_COUNT = 5;
 let current_page = 1;
 const spinner = document.querySelector("#loading");
 
+const userId =document.getElementById('userId');
+const userName =document.getElementById('userName');
+const familyName =document.getElementById('familyName');
+const birthday =document.getElementById('bDate');
+
+const confirmDelete = document.getElementById('confirmDelete');
 
 
+
+
+//GET
 
 document.addEventListener("DOMContentLoaded", () => {
   getData();
   createPagination();
 });
-
-
-
 
 
 function getData() {
@@ -153,7 +159,8 @@ function createCell(data) {
   deleteCell.appendChild(deleteBtn);
   deleteBtn.dataset.bsToggle='modal';
   deleteBtn.dataset.bsTarget='#delete-modal'
-  // deleteBtn.addEventListener('click',)
+  deleteBtn.setAttribute('onclick' ,`getModalData(${data.id})`);
+  
 
   return {
     idCell,
@@ -194,3 +201,27 @@ function createPagination(count) {
 function generateQueryParams(page = 1) {
   return `?page=${page}&limit=${DEFAULT_PAGE_COUNT}`;
 }
+
+function getModalData(id){
+
+  fetch(`${API_URL}/teamwork/${id}`)
+  .then((response) => response.json())
+  .then((data) => {
+  
+    userId.innerText = data.id;
+    userId.dataset.value =data.id;
+   userName.innerText = data.name; 
+   familyName.innerText = data.family; 
+   birthday.innerText = data.birthday; 
+  })
+}
+
+confirmDelete.addEventListener('click',()=>{
+ let id = userId.dataset.value;
+ fetch(`${API_URL}/teamwork/${id}`,{
+  method:'DELETE',
+ })
+ .then((response) => response.json())
+ .then((data) =>getData())
+
+});
