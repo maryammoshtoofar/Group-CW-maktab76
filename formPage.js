@@ -60,7 +60,7 @@ if (params.id) {
       },
     })
       .then((res) => res.json())
-      .then((data) => console.log("hi"));
+      .then(() => (window.location.href = `http://127.0.0.1:5501/index.html?${params.page}`));
   }
   form.addEventListener("submit", (e) => {
     e.preventDefault();
