@@ -12,12 +12,16 @@ const birthday = document.getElementById("bDate");
 const confirmDelete = document.getElementById("confirmDelete");
 
 const addBtn= document.getElementById('addBtn');
+const searchInput=document.getElementById("searchInput")
 //GET
 
 document.addEventListener("DOMContentLoaded", () => {
   getData();
   createPagination();
 });
+
+
+
 
 function getData() {
   table.innerHTML = " ";
@@ -249,4 +253,11 @@ function editPage(id) {
 
 addBtn.addEventListener('click',()=>{
   window.location.href = "http://127.0.0.1:5501/formPage.html";
+})
+
+
+// add debounce search
+const debounceSearch=_.debounce(searchUser,500)
+searchInput.addEventListener("input",(e)=>{
+  debounceSearch(e.target.value)
 })
