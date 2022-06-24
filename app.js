@@ -13,6 +13,7 @@ const confirmDelete = document.getElementById("confirmDelete");
 
 const addBtn= document.getElementById('addBtn');
 const searchInput=document.getElementById("searchInput")
+const searchHolder = document.getElementById("searchHolder");
 //GET
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -260,4 +261,27 @@ addBtn.addEventListener('click',()=>{
 const debounceSearch=_.debounce(searchUser,500)
 searchInput.addEventListener("input",(e)=>{
   debounceSearch(e.target.value)
+  searchHolder.style.display = "block";
 })
+searchInput.addEventListener("blur",(e)=>{
+  searchHolder.style.display = "none";
+  searchHolder.innerHTML = "";
+
+})
+function searchUser(item){
+  return fetch(`${API_URL}/teamwork?search=${item}`)
+  .then((res)=> res.json())
+  .then((data)=>{
+    searchHolder.innerHTML = "";
+    data.persons.forEach(addItemToSearchHolder);
+
+  })
+}
+
+
+function addItemToSearchHolder(item){
+ let html = `
+ <div>${item.name}</div>
+ `
+ searchHolder.innerHTML += html;
+}
